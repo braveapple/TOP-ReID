@@ -1,4 +1,7 @@
 #!/bin/bash
-source activate (your env)
-pip install scikit-learn
-python train_net.py --config_file /15127306268/wyh/MM/configs/RGBNT100/vit_top_re.yml
+
+set -e
+
+CUDA_VISIBLE_DEVICES=1 python train_net.py \
+    --config_file configs/RGBNT100/TOP-ReID.yml \
+    SOLVER.IMS_PER_BATCH 64

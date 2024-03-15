@@ -1,6 +1,6 @@
 MODEL:
   PRETRAIN_CHOICE: 'imagenet'
-  PRETRAIN_PATH_T: '/path/to/your/vitb_16_224_21k.pth'
+  PRETRAIN_PATH_T: '/mnt/disk/wpy_data/checkpoints/TOP-ReID/vitb_16_224_21k.pth'
   TRANSFORMER_TYPE: 'vit_base_patch16_224'
   STRIDE_SIZE: [ 16, 16 ]
   SIE_CAMERA: True
@@ -18,7 +18,7 @@ DATALOADER:
 
 DATASETS:
   NAMES: ('MSVR310')
-  ROOT_DIR: '/path/to/your/data/'
+  ROOT_DIR: '/mnt/disk/wpy_data/dataset/multi_modality_object_reidentification/MSVR310'
 
 SOLVER:
   MAX_EPOCHS: 1000 # Here we follow the setting CCNet
@@ -32,5 +32,5 @@ TEST:
   FEAT_NORM: 'yes'
   MISS: 'nothing'
 
-OUTPUT_DIR: './MSVR310/TOP-ReID'
+OUTPUT_DIR: '/mnt/disk/wpy_data/experiments/TOP-ReID/MSVR310'
 
