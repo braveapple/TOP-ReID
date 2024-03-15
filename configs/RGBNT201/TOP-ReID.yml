@@ -1,6 +1,6 @@
 MODEL:
   PRETRAIN_CHOICE: 'imagenet'
-  PRETRAIN_PATH_T: '/path/to/your/vitb_16_224_21k.pth'
+  PRETRAIN_PATH_T: '/mnt/disk/wpy_data/checkpoints/TOP-ReID/vitb_16_224_21k.pth'
   TRANSFORMER_TYPE: 'vit_base_patch16_224'
   STRIDE_SIZE: [ 16, 16 ]
   SIE_CAMERA: True
@@ -18,7 +18,7 @@ DATALOADER:
 
 DATASETS:
   NAMES: ('RGBNT201')
-  ROOT_DIR: '/path/to/your/data/'
+  ROOT_DIR: '/mnt/disk/wpy_data/dataset/multi_modality_object_reidentification/RGBNT201'
 
 SOLVER:
   BASE_LR: 0.009
@@ -31,5 +31,4 @@ TEST:
   FEAT_NORM: 'yes'
   MISS: "nothing"
 
-OUTPUT_DIR: './RGBNT201/TOP-ReID'
-
+OUTPUT_DIR: '/mnt/disk/wpy_data/experiments/TOP-ReID/RGBNT201'
