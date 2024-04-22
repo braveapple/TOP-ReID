@@ -52,6 +52,7 @@ _C.MODEL.STRIDE_SIZE = [16, 16]
 _C.MODEL.SIE_COE = 3.0
 _C.MODEL.SIE_CAMERA = True
 _C.MODEL.SIE_VIEW = False # We do not use this parameter
+_C.MODEL.SHARE_BACKBONE = False # 共享主干网络
 
 # -----------------------------------------------------------------------------
 # INPUT

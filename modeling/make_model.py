@@ -178,9 +178,12 @@ class BASELINE(nn.Module):
 class TOPReID(nn.Module):
     def __init__(self, num_classes, cfg, camera_num, view_num, factory):
         super(TOPReID, self).__init__()
-        self.NI = build_transformer(num_classes, cfg, camera_num, view_num, factory)
-        self.TI = build_transformer(num_classes, cfg, camera_num, view_num, factory)
-        self.RGB = build_transformer(num_classes, cfg, camera_num, view_num, factory)
+        if cfg.MODEL.SHARE_BACKBONE:
+            self.NI = self.TI = self.RGB = build_transformer(num_classes, cfg, camera_num, view_num, factory)
+        else:
+            self.NI = build_transformer(num_classes, cfg, camera_num, view_num, factory)
+            self.TI = build_transformer(num_classes, cfg, camera_num, view_num, factory)
+            self.RGB = build_transformer(num_classes, cfg, camera_num, view_num, factory)
 
         self.num_classes = num_classes
         self.cfg = cfg
