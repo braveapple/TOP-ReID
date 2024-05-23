@@ -95,8 +95,8 @@ def do_train(cfg,
             torch.cuda.synchronize()
             if (n_iter + 1) % log_period == 0:
                 # print(scheduler._get_lr(epoch))
-                logger.info("Epoch[{}] Iteration[{}/{}] Loss: {:.3f}, Acc: {:.3f}, Base Lr: {:.2e}"
-                            .format(epoch, (n_iter + 1), len(train_loader),
+                logger.info("Epoch[{}/{}] Iteration[{}/{}] Loss: {:.3f}, Acc: {:.3f}, Base Lr: {:.2e}"
+                            .format(epoch, epochs, (n_iter + 1), len(train_loader),
                                     loss_meter.avg, acc_meter.avg, scheduler._get_lr(epoch)[0]))
 
         end_time = time.time()
