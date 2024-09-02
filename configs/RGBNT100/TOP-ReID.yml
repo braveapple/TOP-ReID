@@ -31,4 +31,4 @@ TEST:
   FEAT_NORM: 'yes'
   MISS: "nothing"
 
-OUTPUT_DIR: '/mnt/disk/wpy_data/experiments/TOP-ReID/RGBNT100'
+OUTPUT_DIR: '/mnt/disk/wpy_data/experiments/multi_modality_object_reidentification/TOP-ReID/RGBNT100'
