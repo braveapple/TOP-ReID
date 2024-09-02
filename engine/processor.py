@@ -8,6 +8,15 @@ from utils.metrics import R1_mAP_eval, R1_mAP
 from torch.cuda import amp
 import torch.distributed as dist
 
+from prettytable import PrettyTable
+
+def dict2table(x):
+    t = PrettyTable()
+    t.title = x['title']
+    t.field_names = x['field_names']
+    t.add_row(x['row'])
+
+    return t
 
 def do_train(cfg,
              model,
@@ -44,7 +53,7 @@ def do_train(cfg,
         evaluator = R1_mAP_eval(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM)
     scaler = amp.GradScaler()
     # train
-    best_index = {'mAP': 0, "Rank-1": 0, 'Rank-5': 0, 'Rank-10': 0}
+    best_index = {'mAP': 0, "Rank1": 0, 'Rank5': 0, 'Rank10': 0}
     for epoch in range(1, epochs + 1):
         start_time = time.time()
         loss_meter.reset()
@@ -133,10 +142,14 @@ def do_train(cfg,
                             else:
                                 evaluator.update((feat, vid, camid))
                     cmc, mAP, _, _, _, _, _ = evaluator.compute()
-                    logger.info("Validation Results - Epoch: {}".format(epoch))
-                    logger.info("mAP: {:.1%}".format(mAP))
-                    for r in [1, 5, 10]:
-                        logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc[r - 1]))
+                    ret = {
+                        'title': f'Validation Results - Epoch: {epoch}',
+                        'field_names': ['Rank1', 'Rank5', 'Rank10', 'mAP'],
+                        'row': [f'{x:.2%}' for x in [cmc[0], cmc[4], cmc[9], mAP]]
+                    }
+                    logger.info(f'\n{dict2table(ret)}')
+
+
                     torch.cuda.empty_cache()
             else:
                 model.eval()
@@ -154,21 +167,26 @@ def do_train(cfg,
                         else:
                             evaluator.update((feat, vid, camid))
                 cmc, mAP, _, _, _, _, _ = evaluator.compute()
-                logger.info("Validation Results - Epoch: {}".format(epoch))
-                logger.info("mAP: {:.1%}".format(mAP))
-                for r in [1, 5, 10]:
-                    logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc[r - 1]))
+                ret = {
+                    'title': f'Validation Results - Epoch: {epoch}',
+                    'field_names': ['Rank1', 'Rank5', 'Rank10', 'mAP'],
+                    'row': [f'{x:.2%}' for x in [cmc[0], cmc[4], cmc[9], mAP]]
+                }
+                logger.info(f'\n{dict2table(ret)}')
                 if mAP >= best_index['mAP']:
                     best_index['mAP'] = mAP
-                    best_index['Rank-1'] = cmc[0]
-                    best_index['Rank-5'] = cmc[4]
-                    best_index['Rank-10'] = cmc[9]
-                    torch.save(model.state_dict(),
-                               os.path.join(cfg.OUTPUT_DIR, cfg.MODEL.NAME + 'best.pth'))
-                logger.info("Best mAP: {:.1%}".format(best_index['mAP']))
-                logger.info("Best Rank-1: {:.1%}".format(best_index['Rank-1']))
-                logger.info("Best Rank-5: {:.1%}".format(best_index['Rank-5']))
-                logger.info("Best Rank-10: {:.1%}".format(best_index['Rank-10']))
+                    best_index['Rank1'] = cmc[0]
+                    best_index['Rank5'] = cmc[4]
+                    best_index['Rank10'] = cmc[9]
+                    torch.save(model.state_dict(), os.path.join(cfg.OUTPUT_DIR, cfg.MODEL.NAME + 'best.pth'))
+
+                ret = {
+                    'title': 'Best Results',
+                    'field_names': ['Rank1', 'Rank5', 'Rank10', 'mAP'],
+                    'row': [f'{best_index[x]:.2%}' for x in ['Rank1', 'Rank5', 'Rank10', 'mAP']]
+                }
+                logger.info(f'\n{dict2table(ret)}')
+
                 torch.cuda.empty_cache()
 
 
