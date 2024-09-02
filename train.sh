@@ -18,6 +18,6 @@ exp_01() {
 #     MODEL.DIST_TRAIN True \
 #     SOLVER.IMS_PER_BATCH 100
 
-exp_01 RGBNT100
-# exp_01 RGBNT201
+# exp_01 RGBNT100
+exp_01 RGBNT201
 # exp_01 MSVR310
